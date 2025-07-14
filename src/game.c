@@ -1,0 +1,37 @@
+#include "game.h"
+#include "display.h"
+#include "dungeon.h"
+#include "input.h"
+
+
+Game game = {0};
+
+
+void game_init() {
+	game.dungeon = dungeon_generate();
+
+	Vec2 start = rect_center(&game.dungeon.rooms[0]);
+
+	game.player = player_create(start);
+}
+
+
+void game_destroy() {
+}
+
+
+void game_update() {
+	player_update(&game.player);
+	if (input.restart) {
+		game_destroy();
+		game_init();
+	}
+}
+
+
+void game_draw() {
+	display_clear();
+	dungeon_draw(&game.dungeon);
+	player_draw(&game.player);
+}
+

@@ -1,0 +1,22 @@
+#ifndef PALETTE_H
+#define PALETTE_H
+
+
+#define RGB(r,g,b) (r << 16 | g << 8 | b)
+#define GRAY(v) RGB(v, v, v)
+
+
+#define BLACK		GRAY(0)
+#define WHITE		GRAY(0xFF)
+
+#define BROWN		RGB(0xA0, 0x52, 0x2D)
+#define DARK_BROWN	RGB(0x8B, 0x45, 0x13)
+#define RED		RGB(0xBD, 0x00, 0x13)
+#define GREEN		RGB(0x4A, 0xB1, 0x18)
+#define ORANGE		RGB(0xE7, 0x74, 0x1E)
+#define YELLOW		RGB(0xF5, 0xDD, 0x42)
+#define BLUE		RGB(0x0F, 0x4A, 0xC6)
+#define PURPLE		RGB(0x83, 0x08, 0xff)
+
+
+#endif // PALETTE_H
