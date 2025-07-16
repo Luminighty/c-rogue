@@ -19,7 +19,8 @@ void player_draw(Player* player) {
 }
 
 void player_update(Player* player) {
-	Vec2 new_pos = vec2_add(player->position, input.delta);
+	Input* input = input_get();
+	Vec2 new_pos = vec2_add(player->position, input->delta);
 
 	if (!dungeon_is_solid(&game.dungeon, new_pos.x, new_pos.y)) {
 		player->position = new_pos;

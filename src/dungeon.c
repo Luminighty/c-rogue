@@ -109,17 +109,14 @@ static void room_try_add(Dungeon* dungeon) {
 	dungeon->rooms[dungeon->room_count++] = room;
 }
 
-Dungeon dungeon_generate() {
-	Dungeon dungeon = {0};
-	for_rect(x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) map_set(&dungeon, x, y, TILE_WALL);
+void dungeon_generate(Dungeon* dungeon) {
+	for_rect(x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) map_set(dungeon, x, y, TILE_WALL);
 
 	for (int i = 0; i < MAX_ROOMS; i++)
-		room_try_add(&dungeon);
+		room_try_add(dungeon);
 
 	// DEBUG: To ensure we generate all rooms.
 	// while(dungeon.room_count < MAX_ROOMS)
 	// 	room_try_add(&dungeon);
-
-	return dungeon;
 }
 

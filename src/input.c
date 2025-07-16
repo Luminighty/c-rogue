@@ -1,4 +1,7 @@
 #include "input.h"
 
-Input input = {0};
+static Input input = {0};
 
+Input* input_get() {
+	return &input;
+}

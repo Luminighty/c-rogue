@@ -8,7 +8,7 @@ Game game = {0};
 
 
 void game_init() {
-	game.dungeon = dungeon_generate();
+	dungeon_generate(&game.dungeon);
 
 	Vec2 start = rect_center(&game.dungeon.rooms[0]);
 
@@ -21,8 +21,9 @@ void game_destroy() {
 
 
 void game_update() {
+	Input* input = input_get();
 	player_update(&game.player);
-	if (input.restart) {
+	if (input->restart) {
 		game_destroy();
 		game_init();
 	}

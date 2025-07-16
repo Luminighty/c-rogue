@@ -1,3 +1,4 @@
+#include "app.h"
 #include "config.h"
 #include "display.h"
 #include "input.h"
@@ -49,7 +50,7 @@ static inline void display_draw() {
 
 static const Rectangle RENDER_SOURCE = {.x = 0, .y = 0, .width = WINDOW_WIDTH, .height = -WINDOW_HEIGHT};
 static const Rectangle RENDER_DEST = {.x = 0, .y = 0, .width = TARGET_WINDOW_WIDTH, .height = TARGET_WINDOW_HEIGHT};
-void platform_render() {
+static inline void platform_render() {
 	BeginDrawing();
 	ClearBackground(BLACK);
 
@@ -73,9 +74,25 @@ bool platform_is_running() {
 	return !WindowShouldClose();
 }
 
-void platform_input(Input* input) {
+static inline void platform_input(Input* input) {
 	input->delta.x = IsKeyPressed(KEY_RIGHT) - IsKeyPressed(KEY_LEFT);
 	input->delta.y = IsKeyPressed(KEY_DOWN) - IsKeyPressed(KEY_UP);
 	input->restart = IsKeyDown(KEY_R);
+}
+
+
+int main() {
+	platform_init();
+	app_init();
+
+	while (app_running() && !WindowShouldClose()) {
+		platform_input(input_get());
+		app_update();
+		platform_render();
+	}
+
+	app_destroy();
+	platform_destroy();
+	return 0;
 }
 

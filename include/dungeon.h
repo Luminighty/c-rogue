@@ -19,7 +19,7 @@ typedef struct {
 } Dungeon;
 
 
-Dungeon dungeon_generate();
+void dungeon_generate(Dungeon* dungeon);
 void dungeon_draw(Dungeon* dungeon);
 Tile dungeon_get_tile(Dungeon* dungeon, int x, int y);
 bool dungeon_is_solid(Dungeon* dungeon, int x, int y);

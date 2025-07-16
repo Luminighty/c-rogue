@@ -2,3 +2,4 @@ build/
 bin/
 compile_commands.json
 .cache/
+platform_esp/managed_components/

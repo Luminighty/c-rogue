@@ -2,6 +2,7 @@
 #define DISPLAY_H
 
 #include "config.h"
+#include <stdbool.h>
 
 
 #define ZINDEX_FORCE 0
@@ -20,12 +21,14 @@ typedef struct {
 typedef struct {
 	Glyph glyphs[SCREEN_HEIGHT][SCREEN_WIDTH];
 	ZIndex z_buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+	bool is_dirty;
 } Display;
 
 Display* display_get();
 
 void display_clear();
 void display_putchar(int x, int y, Glyph glyph, ZIndex z_index);
+void display_putstr(int x, int y, const char* message, int fg, int bg, ZIndex z_index);
 
 #define display_foreach(x, y)\
 	for(int y = 0; y < SCREEN_HEIGHT; y++)\

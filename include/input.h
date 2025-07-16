@@ -7,11 +7,11 @@
 
 typedef struct {
 	Vec2 delta;
-
 	bool restart;
 } Input;
 
-extern Input input;
+
+Input* input_get();
 
 
 #endif // INPUT_H
