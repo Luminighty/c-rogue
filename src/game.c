@@ -11,8 +11,8 @@ void game_init() {
 	dungeon_generate(&game.dungeon);
 
 	Vec2 start = rect_center(&game.dungeon.rooms[0]);
-
 	game.player = player_create(start);
+	player_fov(&game.player);
 }
 
 

@@ -4,6 +4,7 @@
 #include "input.h"
 #include "math.h"
 #include "palette.h"
+#include "dungeon.h"
 
 static Glyph glyph = glyph(0x01, WHITE, BLACK);
 
@@ -24,6 +25,10 @@ void player_update(Player* player) {
 
 	if (!dungeon_is_solid(&game.dungeon, new_pos.x, new_pos.y)) {
 		player->position = new_pos;
+		player_fov(player);
 	}
 }
 
+void player_fov(Player* player) {
+	dungeon_update_fov(&game.dungeon, player->position.x, player->position.y, 4);
+}

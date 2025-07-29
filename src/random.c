@@ -3,7 +3,7 @@
 #include <time.h>
 
 void random_init() {
-	// srand(time(NULL));
+	srand(time(NULL));
 }
 
 int random_rangei(int min, int max) {

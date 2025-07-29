@@ -9,7 +9,7 @@
 #define CHR_WIDTH 8
 #define CHR_HEIGHT 8
 
-#define CHR_SCALE 3
+#define CHR_SCALE 1
 
 // Window Dimensions based on pixels
 #define WINDOW_WIDTH (CHR_WIDTH * SCREEN_WIDTH)

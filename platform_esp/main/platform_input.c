@@ -1,5 +1,6 @@
 #include "platform_input.h"
 
+#include "input.h"
 #include "pinout.h"
 #include "esp_adc/adc_oneshot.h"
 #include "driver/gpio.h"
@@ -35,13 +36,14 @@ void platform_init_buttons() {
 	gpio_config(&io_conf);
 }
 
+
 int prev_joystick_x;
 int prev_joystick_y;
 int prev_joystick_btn;
 
-int x, y = 0;
-
 void platform_update_input() {
+	Input* input = input_get();
+
 	int joystick_btn = gpio_get_level(GPIO_BUTTON);
 	int x_val, y_val = 0;
 	adc_oneshot_read(adc1_handle, ADC_AXIS_X, &x_val);
@@ -56,10 +58,12 @@ void platform_update_input() {
 		if (dy > JOYSTICK_DEADZONE / 2)
 			joystick_y = y_val > JOYSTICK_IDLE ? 1 : -1;
 	}
-	if (joystick_x != prev_joystick_x)
-		y += joystick_x;
-	if (joystick_y != prev_joystick_y)
-		x += joystick_y;
+	input->delta.x = joystick_y;
+	input->delta.y = joystick_x;
+	input->restart = !joystick_btn;
+	// if (joystick_x != prev_joystick_x)
+	// if (joystick_y != prev_joystick_y)
+	// 	x += joystick_y;
 	prev_joystick_x = joystick_x;
 	prev_joystick_y = joystick_y;
 	prev_joystick_btn = joystick_btn;

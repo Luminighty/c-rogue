@@ -1,6 +1,7 @@
 #include "dungeon.h"
 #include "config.h"
 #include "display.h"
+#include "fov.h"
 #include "math.h"
 #include "palette.h"
 #include "random.h"
@@ -20,7 +21,14 @@ static inline Glyph tile_glyph(Tile t) {
 void dungeon_draw(Dungeon* dungeon) {
 	dungeon_foreach(x, y) {
 		Tile t = dungeon->map[y][x];
-		Glyph g = tile_glyph(t);
+		Glyph g = {0};
+		if (dungeon->discovered[y][x]) {
+			g = tile_glyph(t);
+			if (!dungeon->visible[y][x])
+				g.fg = GRAY(0x66);
+		} else {
+			g.glyph = ' ';
+		}
 		display_putchar(x, y, g, ZINDEX_FORCE);
 	}
 }
@@ -110,7 +118,12 @@ static void room_try_add(Dungeon* dungeon) {
 }
 
 void dungeon_generate(Dungeon* dungeon) {
-	for_rect(x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) map_set(dungeon, x, y, TILE_WALL);
+	dungeon->room_count = 0;
+	for_rect(x, y, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) {
+		map_set(dungeon, x, y, TILE_WALL);
+		dungeon->visible[y][x] = false;
+		dungeon->discovered[y][x] = false;
+	}
 
 	for (int i = 0; i < MAX_ROOMS; i++)
 		room_try_add(dungeon);
@@ -120,3 +133,24 @@ void dungeon_generate(Dungeon* dungeon) {
 	// 	room_try_add(&dungeon);
 }
 
+
+static bool is_opaque(int x, int y, void* vmap) {
+	if (x < 0 || y < 0 || x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT)
+		return true;
+	Dungeon* dungeon = vmap;
+	return dungeon->map[y][x] == TILE_WALL;
+}
+
+static void on_visible(int x, int y, void* vmap) {
+	if (x < 0 || y < 0 || x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT)
+		return;
+	Dungeon* dungeon = vmap;
+	dungeon->visible[y][x] = true;
+	dungeon->discovered[y][x] = true;
+}
+
+void dungeon_update_fov(Dungeon* dungeon, int x, int y, int dist) {
+	dungeon_foreach(x, y)
+		dungeon->visible[y][x] = false;
+	fov_2d(x, y, dist, is_opaque, on_visible, dungeon);
+}
